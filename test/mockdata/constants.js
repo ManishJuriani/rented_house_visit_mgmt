@@ -1,0 +1,3 @@
+exports.mockHousesData = [{"id":1,"title":"Jeanine Forsyth","description":"Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.","address":"3715 Westridge Circle","owner_id":1}];
+
+exports.mockVisitAvailability = [{"id":1,"property_id":5,"start_time":"11:00","duration":45,"day_of_week":0,"status":"AVAILABLE","realtor_id":null}]

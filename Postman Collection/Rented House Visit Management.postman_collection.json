@@ -1,0 +1,68 @@
+{
+	"info": {
+		"_postman_id": "7228a62e-0c27-4e27-a47f-d4aec885576f",
+		"name": "Rented House Visit Management",
+		"description": "Start the server at port 5050,and hit apis.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Houses",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5050/timeslots",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5050",
+					"path": [
+						"timeslots"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Time Slots",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5050/houses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5050",
+					"path": [
+						"houses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Book Time Slot",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5050/timeslots/40",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5050",
+					"path": [
+						"timeslots",
+						"40"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
