@@ -25,3 +25,15 @@ Skip 1-3 steps if already done from Development steps above
 3. Run `npm i` to install all dependencies
 4. Run `npm test` to run unit tests. The report is seen in the console.
 5. Open the html file generated in test/mochareport/mocha_report.html in the broswer to view the test cases report.
+
+### What is done and what is pending? ###
+
+* Done
+
+1. Developed REST APIs for listing houses, showing available time slots, book a visit
+2. Unit Testing for all the apis is completed
+3. Postman collection is updated
+
+* Not Done
+
+1. Swagger for the apis is not done
