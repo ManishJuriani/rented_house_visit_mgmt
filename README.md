@@ -17,7 +17,7 @@ Prerequisite - node.js and npm must be installed on the system
 4. Run `npm run dev` to start the server at port 5050 / some other port specified in environment file
 5. Hit the api's using the Postman Collection Attached in the folder Postman Collection
 
-* Testing
+* Testing -
 Skip 1-3 steps if already done from Development steps above
 
 1. Clone the repository / have the code in your machine
