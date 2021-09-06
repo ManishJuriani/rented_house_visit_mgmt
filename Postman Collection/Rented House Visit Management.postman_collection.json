@@ -12,25 +12,6 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5050/timeslots",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5050",
-					"path": [
-						"timeslots"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Time Slots",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
 					"raw": "http://localhost:5050/houses",
 					"protocol": "http",
 					"host": [
@@ -39,6 +20,25 @@
 					"port": "5050",
 					"path": [
 						"houses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Available Time Slots",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5050/timeslots",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5050",
+					"path": [
+						"timeslots"
 					]
 				}
 			},

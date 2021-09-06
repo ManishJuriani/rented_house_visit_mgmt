@@ -2,8 +2,12 @@
 const chai = require("chai");
 const sinon = require("sinon");
 const consts = require("../../mockdata/constants");
+let dbUtils = require("../../../utils/db");
+sinon.stub(dbUtils, "createDBConnection").resolves();
+const SequelizeMock = require("sequelize-mock");
+global.DB_CONN = new SequelizeMock();
 const app = require("../../../server");
-const fileSystem = require("fs");
+dbUtils.createDBConnection.restore();
 
 // Configure chai
 chai.use(require("chai-http"));
@@ -18,12 +22,18 @@ describe("GET /houses", () => {
     });
 
     afterEach((done) => {
+        DB_CONN.define.restore();
         sinon.restore();
         done();
     });
 
     it("Get Houses: Pass case", (done) => {
-        sinon.stub(fileSystem,"readFileSync").returns(JSON.stringify(consts.mockHousesData))
+		const dbStub = sinon.stub(DB_CONN, "define");
+        dbStub.onCall(2).returns({
+            belongsTo:sinon.stub(),
+            findAll: sinon.stub().resolves(consts.mockHousesData)
+        })
+        dbStub.onCall(3).returns({belongsTo:sinon.stub()})
 
         chai.request(app)
             .get("/houses")
@@ -37,8 +47,13 @@ describe("GET /houses", () => {
             });
     });
 
-    it("Get Houses: Fail case - file reading failed", (done) => {
-        sinon.stub(fileSystem,"readFileSync").throws(Error("File reading failed"))
+    it.skip("Get Houses: Fail case - db call failed", (done) => {
+        const dbStub = sinon.stub(DB_CONN, "define");
+        dbStub.onCall(2).returns({
+            belongsTo:sinon.stub(),
+            findAll: sinon.stub().rejects("Error")
+        })
+        dbStub.onCall(3).returns({belongsTo:sinon.stub()})
 
         chai.request(app)
             .get("/houses")

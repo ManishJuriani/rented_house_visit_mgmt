@@ -4,25 +4,35 @@ const logger = require('../utils/logger');
 const logMsgs = require("../static/log_messages");
 const respMsgs = require("../static/resp_messages");
 const consts = require("../static/constants");
-const fileSystem = require("fs");
-const path = require('path');
 const helper = require("../utils/helper");
 
 exports.getTimeSlots = async (req, res) => {
+    global.models = require('../db/associations');
+
     try{
-        
         logger.info(logMsgs.vsts_getSltsSt);
         
         logger.info(logMsgs.vsts_getSltsHouses);
-        const housesData = fileSystem.readFileSync(path.join(__dirname,"../static/data/houses.json"))
-
-        logger.info(logMsgs.vsts_getSltsSlots);
-        const visitSlotsAvailability = fileSystem.readFileSync(path.join(__dirname,"../static/data/house_visit_availability.json"))
 
         logger.info(logMsgs.vsts_getSltsAvlSlt);
-        const slotsAvailable = helper.frmtGtAvlblSltsRspData(visitSlotsAvailability,housesData); 
+        // get available slots with house and owner data
+        const visitSlotsAvailability = await models.houseVisitAvailabilitiesModel
+                                        .findAll({
+                                            where: {
+                                                status: consts.SLOT_STATUS.AVAILABLE
+                                            },
+                                            attributes: ['id','start_time','duration','day_of_week'],
+                                            include: [{
+                                                model:models.housesModel,
+                                                include: [{
+                                                    model: models.ownersModel
+                                                }]
+                                            }],
+                                        })
 
+        const slotsAvailable = helper.frmtGtAvlblSltsRspData(visitSlotsAvailability); 
         logger.info(logMsgs.vsts_getSltsSuc(slotsAvailable));
+
         res.status(200).send({
             message: respMsgs.SUCCESS,
             slotsAvailable
@@ -37,32 +47,35 @@ exports.getTimeSlots = async (req, res) => {
 }
 
 exports.bookTimeSlot = async (req, res) => {
+    global.models = require('../db/associations');
     try{
         
         const slotId = req.params.id;
 
         logger.info(logMsgs.vsts_bookSltHouses);
-        const housesData = fileSystem.readFileSync(path.join(__dirname,"../static/data/houses.json"))
-
-        logger.info(logMsgs.vsts_bookSltSlots);
-        const visitSlotsAvailability = fileSystem.readFileSync(path.join(__dirname,"../static/data/house_visit_availability.json"))
 
         logger.info(logMsgs.vsts_bookSltAvlSlt);
-        const slotsAvailable = helper.frmtGtAvlblSltsRspData(visitSlotsAvailability,housesData);
+        // If timeslot is available, book it
+        const [updatedSlot] = await models.houseVisitAvailabilitiesModel
+        .update(
+            {
+                status: consts.SLOT_STATUS.UNAVAILABLE
+            },
+            {
+                where: {
+                    id: slotId,
+                    status: consts.SLOT_STATUS.AVAILABLE
+                }
+            })
         
-        let response;
-        if(slotsAvailable.hasOwnProperty(slotId)){
-            response = slotsAvailable[slotId];
-        }else{
+        if(updatedSlot==0)
             return res.status(400).send({
                 message: respMsgs.bookTs_notAvailable,
-            })
-        }
+            });
         
-        logger.info(logMsgs.vsts_bookSltSuc(response));
+        logger.info(logMsgs.vsts_bookSltSuc(slotId));
         res.status(200).send({
             message: respMsgs.SUCCESS,
-            slot: response
         });
 
     }catch(err){

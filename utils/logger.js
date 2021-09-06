@@ -7,7 +7,7 @@ const myFormat = printf(({ level, message, label, timestamp }) => {
 	return `${timestamp} [${label}] ${level}: ${message}`;
 });
 
-var logger = createLogger({
+let logger = createLogger({
 	levels: {
 		error: 0,
 		warn: 1,

@@ -3,18 +3,22 @@
 const logger = require('../utils/logger');
 const logMsgs = require("../static/log_messages");
 const respMsgs = require("../static/resp_messages");
-const consts = require("../static/constants");
-const fileSystem = require("fs");
-const path = require('path');
 const helper = require("../utils/helper");
 
 exports.getHouses = async (req, res)=> {
+    global.models = require('../db/associations');
     try{
         logger.info(logMsgs.hos_getHosSt);
-        
-        logger.info(logMsgs.hos_getHosHouses);
-        const housesData = fileSystem.readFileSync(path.join(__dirname,"../static/data/houses.json"))
 
+        logger.info(logMsgs.hos_getHosHouses);
+        // get house details along with owner details
+        const housesData = await models.housesModel
+                            .findAll({
+                                include: [{
+                                    model:models.ownersModel
+                                }],
+                            })
+        
         logger.info(logMsgs.hos_fmtRes);
         const listOfHouses = helper.formatGetHousesResponseData(housesData); 
         
